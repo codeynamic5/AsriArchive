@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Asri's Archives - Home</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .home-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: url("your-full-image-url-here") no-repeat center
+          center/cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .home-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .home-content {
+        position: relative;
+        z-index: 2;
+        color: #fff;
+        text-align: center;
+      }
+
+      .home-content h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .home-content button {
+        padding: 1rem 2rem;
+        font-size: 1.5rem;
+        background-color: #fff;
+        color: #333;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .home-content button:hover {
+        background-color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="home-container">
+      <div class="home-overlay"></div>
+      <div class="home-content">
+        <h1>Welcome to The Asri's Archives</h1>
+        <button onclick="window.location.href='lobby.html'">Enter</button>
+      </div>
+    </div>
+  </body>
+</html>

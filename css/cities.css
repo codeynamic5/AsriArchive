@@ -1,0 +1,132 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #666;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.title-section {
+  position: sticky;
+  top: 60px; /* Adjust based on header height */
+  padding: 40px 0 20px 40px;
+  text-align: left;
+  z-index: 10;
+}
+
+.title-section h1 {
+  font-size: 4rem;
+  color: #000000;
+  margin: 0;
+  font-weight: bold;
+}
+
+.image-collage {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.image-collage img {
+  flex: 0 1 auto;
+  max-width: none;
+  width: auto;
+  height: auto;
+  max-height: 80vh;
+  margin: var(--random-margin, 20px);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.image-collage img:nth-child(3n) {
+  --random-margin: 30px 20px 10px 25px;
+}
+
+.image-collage img:nth-child(2n) {
+  --random-margin: 15px 30px 20px 10px;
+}
+
+.image-collage img:nth-child(4n) {
+  --random-margin: 10px 15px 25px 20px;
+}
+
+.image-collage img:nth-child(5n) {
+  --random-margin: 20px 10px 15px 30px;
+}
+
+@media (max-width: 768px) {
+  .image-collage {
+    padding: 20px;
+  }
+  
+  .image-collage img {
+    max-height: none;
+    margin: 15px 0;
+  }
+}
+
+.image-collage img:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90vh;
+  margin: auto;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
