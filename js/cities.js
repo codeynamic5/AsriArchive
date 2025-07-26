@@ -26,12 +26,8 @@ function loadUploadedImages() {
     const img = document.createElement("img");
     img.src = imageData.data;
     img.alt = imageData.name;
-    img.classList.add("gallery-image", "uploaded-image");
+    img.classList.add("gallery-image");
     img.title = imageData.name;
-    
-    // Add a small indicator that this is an uploaded image
-    img.style.border = "3px solid #007bff";
-    img.style.borderRadius = "8px";
     
     imageContainer.appendChild(img);
   });
@@ -65,8 +61,13 @@ setupModal();
 window.addEventListener('storage', function(e) {
   if (e.key === 'londonImages') {
     // Reload uploaded images if localStorage changes
-    const uploadedImages = document.querySelectorAll('.uploaded-image');
-    uploadedImages.forEach(img => img.remove());
+    const uploadedImages = document.querySelectorAll('.gallery-image');
+    // Remove only uploaded images (keep original images)
+    uploadedImages.forEach(img => {
+      if (img.src.startsWith('data:')) {
+        img.remove();
+      }
+    });
     loadUploadedImages();
     setupModal();
   }

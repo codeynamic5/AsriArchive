@@ -30,6 +30,8 @@ uploadArea.addEventListener("drop", (e) => {
 fileInput.addEventListener("change", (e) => {
   const files = Array.from(e.target.files);
   handleFiles(files);
+  // Clear the input so the same files can be selected again
+  e.target.value = '';
 });
 
 function handleFiles(files) {
@@ -42,14 +44,37 @@ function handleFiles(files) {
     return;
   }
 
-  selectedFiles = imageFiles;
-  displayImagePreviews(imageFiles);
+  // Check file sizes (300MB = 300 * 1024 * 1024 bytes)
+  const maxFileSize = 300 * 1024 * 1024; // 300MB in bytes
+  const oversizedFiles = imageFiles.filter(file => file.size > maxFileSize);
+  
+  if (oversizedFiles.length > 0) {
+    const oversizedNames = oversizedFiles.map(file => file.name).join(', ');
+    alert(`The following files exceed the 300MB limit: ${oversizedNames}\nPlease select smaller files.`);
+    return;
+  }
+
+  // Filter out duplicate files based on name and size
+  const existingFileKeys = selectedFiles.map(file => `${file.name}-${file.size}`);
+  const newFiles = imageFiles.filter(file => {
+    const fileKey = `${file.name}-${file.size}`;
+    return !existingFileKeys.includes(fileKey);
+  });
+
+  if (newFiles.length === 0) {
+    alert("All selected files are already added.");
+    return;
+  }
+
+  // Add new files to existing selection
+  selectedFiles = [...selectedFiles, ...newFiles];
+  displayImagePreviews(selectedFiles);
 
   // Update upload area text
   const uploadText = uploadArea.querySelector(".upload-text");
   const uploadHint = uploadArea.querySelector(".upload-hint");
-  uploadText.textContent = `${imageFiles.length} image(s) selected`;
-  uploadHint.textContent = "Click to select different images";
+  uploadText.textContent = `${selectedFiles.length} image(s) selected`;
+  uploadHint.textContent = "Click to select more images or drag & drop";
 }
 
 function displayImagePreviews(files) {
@@ -105,15 +130,15 @@ function removeImage(index) {
     // Reset upload area text
     const uploadText = uploadArea.querySelector(".upload-text");
     const uploadHint = uploadArea.querySelector(".upload-hint");
-    uploadText.textContent = "Drop your photo here or click to browse";
-    uploadHint.textContent = "Supports JPG, PNG, GIF up to 10MB";
+    uploadText.textContent = "Drop your photos here or click to browse";
+    uploadHint.textContent = "Supports JPG, PNG, GIF up to 300MB per image";
   } else {
     displayImagePreviews(selectedFiles);
     // Update upload area text
     const uploadText = uploadArea.querySelector(".upload-text");
     const uploadHint = uploadArea.querySelector(".upload-hint");
     uploadText.textContent = `${selectedFiles.length} image(s) selected`;
-    uploadHint.textContent = "Click to select different images";
+    uploadHint.textContent = "Click to select more images or drag & drop";
   }
 }
 
