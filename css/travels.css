@@ -23,6 +23,8 @@ body {
 .nav-links {
   display: flex;
   gap: 2rem;
+  justify-content: center;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .nav-links a {
