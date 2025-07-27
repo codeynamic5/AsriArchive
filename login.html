@@ -222,46 +222,20 @@
         <div class="success-message" id="successMessage"></div>
       </form>
 
-      <div class="divider">
-        <span>or</span>
-      </div>
-
-      <button type="button" class="guest-btn" onclick="loginAsGuest()">
-        Continue as Guest
-      </button>
-
       <a href="homepage.html" class="back-link">← Back to Homepage</a>
     </div>
 
     <script>
-      // *** ADMIN LOGIN ***
+      const auth = firebase.auth();
       document.getElementById("loginForm").addEventListener("submit", (e) => {
         e.preventDefault();
-        const email = document.getElementById("username").value.trim();
+        const email = document.getElementById("username").value;
         const pass = document.getElementById("password").value;
-        firebase
-          .auth()
+        auth
           .signInWithEmailAndPassword(email, pass)
-          .then(() => {
-            // success → lobby
-            window.location.href = "lobby.html";
-          })
+          .then(() => (window.location.href = "lobby.html"))
           .catch((err) => {
             document.getElementById("errorMessage").textContent = err.message;
-            document.getElementById("errorMessage").style.display = "block";
-          });
-      });
-
-      // *** GUEST LOGIN ***
-      document.querySelector(".guest-btn").addEventListener("click", () => {
-        firebase
-          .auth()
-          .signInAnonymously()
-          .then(() => {
-            window.location.href = "lobby.html";
-          })
-          .catch((err) => {
-            alert("Error during guest login: " + err.message);
           });
       });
     </script>

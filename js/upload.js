@@ -10,31 +10,60 @@ const titleInput        = document.getElementById("titleInput");   // <─ NEW
 
 let selectedFiles = [];
 
-// Check authentication when page loads
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM loaded, checking authentication...');
+/* upload.js */
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) Query your elements
+  const titleInput      = document.getElementById('titleInput');
+  const openWidgetBtn   = document.getElementById('openWidgetBtn');
+  const uploadProgress  = document.getElementById('uploadProgress');
   
-  // Check if user is logged in
-  const currentRole = getUserRole();
-  if (!currentRole) {
-    // Redirect to login if not authenticated
-    alert('Please log in to access the upload page.');
-    window.location.href = 'login.html';
-    return;
-  }
-  
-  // Check if user is admin
-  if (currentRole !== 'admin') {
-    // Show access denied message for guests
-    document.getElementById('uploadForm').style.display = 'none';
-    document.getElementById('accessDenied').style.display = 'block';
-    return;
-  }
-  
-  // User is admin, set up upload functionality
-  console.log('Admin user detected, enabling upload functionality');
-  setupUploadFunctionality();
+  // 2) (Optional) Your existing preview code goes here…
+
+  // 3) === INSERT THE CLOUDINARY + FIRESTORE UPLOAD HANDLER ===
+  openWidgetBtn.onclick = () => {
+    const title = titleInput.value.trim();
+    if (!title) {
+      return alert('Add a title first');
+    }
+    cloudinary.createUploadWidget({
+      cloudName:   'YOUR_CLOUD_NAME',
+      uploadPreset:'unsigned_cities',
+      multiple:     true,
+      folder:       `cities/london`
+    }, async (err, result) => {
+      if (err) return alert(err.message);
+
+      // When all files have been processed:
+      if (result.event === 'queues-end') {
+        // Gather successful uploads
+        const imgs = result.files
+          .filter(f => f.event === 'success')
+          .map(f => ({
+            url:  f.info.secure_url,
+            name: f.info.original_filename + '.' + f.info.format
+          }));
+
+        // Save metadata to Firestore
+        try {
+          const colRef = await db
+            .collection('cities').doc('london')
+            .collection('collections')
+            .add({
+              title,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              images: imgs
+            });
+          alert('Saved: ' + colRef.id);
+          location.reload();
+        } catch (e) {
+          alert('Firestore error: ' + e.message);
+        }
+      }
+    }).open();
+  };
 });
+
 
 function setupUploadFunctionality() {
   const uploadBtn = document.getElementById('uploadBtn');

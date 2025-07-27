@@ -54,9 +54,14 @@
   <body>
     <div class="container">
       <h1>Asri's Archive</h1>
-      <button class="enter-button" onclick="window.location.href='login.html'">
+      <button class="enter-button" onclick="window.location.href='lobby.html'">
         Enter
       </button>
     </div>
+    <script>
+      document.getElementById("enterBtn").addEventListener("click", () => {
+        window.location.href = "lobby.html";
+      });
+    </script>
   </body>
 </html>

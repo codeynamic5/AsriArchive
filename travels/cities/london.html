@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>London - Tate Modern</title>
     <link rel="stylesheet" href="../../css/cities.css" />
+    <!-- Cloudinary widget -->
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+    <!-- Firebase App & Firestore SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    <script>
+      // ← your Firebase config from the console
+      firebase.initializeApp({
+        apiKey: "AIzaSyDwuRDh-RBVO1b0iC4pz_cdHEVYfIbVzrU",
+        authDomain: "asriarchive-2025.firebaseapp.com",
+        projectId: "asriarchive-2025",
+        storageBucket: "asriarchive-2025.firebasestorage.app",
+        messagingSenderId: "922720875250",
+        appId: "1:922720875250:web:a1aea1c8e286496afd966b",
+        measurementId: "G-N6R5M29TTS",
+      });
+      const db = firebase.firestore();
+    </script>
   </head>
   <body>
     <div class="header">
@@ -35,7 +54,22 @@
       <img class="modal-content" id="modalImage" />
     </div>
 
-    <script src="../../js/auth.js"></script>
+    <div id="uploadControls" style="display: none">
+      <input type="text" id="titleInput" placeholder="Collection title" />
+      <button id="openWidgetBtn">Choose & Upload Photos</button>
+      <div id="uploadProgress"></div>
+    </div>
+
+    <script src="../js/upload.js" defer></script>
+    <script>
+      // show/hide uploadControls based on admin login
+      firebase.auth().onAuthStateChanged((user) => {
+        const ctr = document.getElementById("uploadControls");
+        if (user && !user.isAnonymous) ctr.style.display = "block";
+        else ctr.style.display = "none";
+      });
+    </script>
+
     <script src="../../js/cities.js"></script>
   </body>
 </html>
