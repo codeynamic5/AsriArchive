@@ -12,32 +12,46 @@ import {
   DocumentData,
 } from "firebase/firestore";
 
-interface Collection {
+interface CityCollection {
   title: string;
-  images: { url: string; name: string }[];
+  images: Array<{
+    url: string;
+    name: string;
+  }>;
 }
 
 export default function LondonPage() {
-  const [collections, setCollections] = useState<Collection[]>([]);
+  const [collections, setCollections] = useState<CityCollection[]>([]);
 
   useEffect(() => {
     const q = query(
       collection(db, "cities", "london", "collections"),
       orderBy("createdAt", "desc")
     );
+
     const unsubscribe = onSnapshot(q, (snap) => {
-      const cols: Collection[] = snap.docs.map((doc) => {
+      const cols: CityCollection[] = snap.docs.map((doc) => {
         const data = doc.data() as DocumentData;
-        return {
-          title: data.title as string,
-          images: (data.images as any[]).map((img) => ({
-            url: img.url as string,
-            name: img.name as string,
-          })),
-        };
+
+        // assert the shape from Firestore into our interface
+        const title = typeof data.title === "string" ? data.title : "Untitled";
+
+        // We expect data.images to be an array of objects with url & name
+        const rawImages = Array.isArray(data.images)
+          ? data.images
+          : [];
+
+        const images = rawImages.map((img) => ({
+          url: String((img as Record<string, unknown>).url || ""),
+          name: String((img as Record<string, unknown>).name || ""),
+        }));
+
+        return { title, images };
       });
+
       setCollections(cols);
     });
+
     return () => unsubscribe();
   }, []);
 
