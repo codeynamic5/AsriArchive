@@ -2,8 +2,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";           // now resolves!
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { db } 
+  from "@/lib/firebase";  
+import { collection, query, orderBy, onSnapshot } 
+  from "firebase/firestore";
 
 export default function LondonPage() {
   const [collections, setCollections] = useState<any[]>([]);
