@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Photo - London</title>
+    <link rel="stylesheet" href="css/cities.css" />
+    <link rel="stylesheet" href="css/upload.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="nav-links">
+        <a href="lobby.html">Lobby</a>
+        <a href="travel.html">Travel</a>
+        <a href="bookclub.html">Ayu's BookClub</a>
+        <a href="exposures.html">Exposures</a>
+      </div>
+    </div>
+
+    <div class="upload-container">
+      <div class="upload-box" id="uploadBox">
+        <h1 class="upload-title">Upload Photo</h1>
+        <p class="upload-subtitle">Share your memories from London</p>
+
+        <!-- Admin access message (hidden by default) -->
+        <div
+          id="accessDenied"
+          style="display: none; text-align: center; padding: 40px"
+        >
+          <h2 style="color: #dc3545; margin-bottom: 20px">
+            🔒 Admin Access Required
+          </h2>
+          <p style="color: #666; margin-bottom: 30px">
+            Only administrators can upload photos to the archive.<br />
+            Please log in with admin credentials to access this feature.
+          </p>
+          <div
+            style="
+              display: flex;
+              gap: 15px;
+              justify-content: center;
+              flex-wrap: wrap;
+            "
+          >
+            <a href="login.html" class="btn btn-primary">Login as Admin</a>
+            <a href="travels/cities/london.html" class="btn btn-secondary"
+              >Back to Gallery</a
+            >
+          </div>
+        </div>
+
+        <form id="uploadForm">
+          <label class="title-label" for="titleInput">Title</label>
+          <input
+            type="text"
+            id="titleInput"
+            name="title"
+            class="title-input"
+            placeholder="Enter a title for your photo"
+            required
+          />
+
+          <div
+            class="upload-area"
+            id="uploadArea"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">
+              Drop your photos here or click to browse
+            </div>
+            <div class="upload-hint">
+              Select multiple images to create collections like Instagram
+              posts!<br />
+              Supports JPG, PNG, GIF up to 300MB per image
+            </div>
+          </div>
+
+          <input
+            type="file"
+            id="fileInput"
+            class="file-input"
+            accept="image/*"
+            multiple
+          />
+
+          <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="preview-container" id="previewContainer">
+            <div class="preview-header" id="previewHeader">
+              Selected Images:
+            </div>
+            <div class="preview-images-grid" id="previewImagesGrid"></div>
+          </div>
+
+          <div class="button-group">
+            <a href="travels/cities/london.html" class="btn btn-secondary"
+              >Cancel</a
+            >
+            <button
+              id="uploadBtn"
+              class="btn btn-primary"
+              onclick="uploadPhotos()"
+            >
+              Upload Photos
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/upload.js"></script>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asri Archive - Lobby</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #dbe9f3; /* Soft bluish gray */
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+      }
+
+      .nav-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        width: 100%;
+        max-width: 1000px;
+      }
+
+      .nav-item {
+        background-color: #d3c3c3; /* Soft visible pink */
+        padding: 40px 20px;
+        border-radius: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        min-height: 280px;
+        border: 2px solid #b98989; /* Optional: visual aid during development */
+      }
+
+      .nav-item:hover {
+        transform: scale(1.05);
+      }
+
+      .nav-placeholder {
+        width: 200px;
+        height: 150px;
+        background-color: #5f1a1a;
+        margin: 0 auto;
+        border-radius: 4px;
+      }
+
+      .nav-item h2 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 30px;
+      }
+
+      .nav-placeholder {
+        width: 200px;
+        height: 150px;
+        background-color: #dcdcdc; /* light gray for placeholder */
+        margin: 0 auto;
+        border-radius: 4px;
+      }
+
+      /* Role‐indicator pill */
+      .role-indicator {
+        position: fixed;
+        top: 1rem; /* 16px from the top */
+        right: 1rem; /* 16px from the right */
+        background-color: #5b7894;
+        color: #fff;
+        padding: 0.5rem 1rem; /* vertical | horizontal */
+        border: none;
+        border-radius: 9999px; /* full pill shape */
+        font-size: 0.9rem;
+        font-weight: bold;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        cursor: default;
+        z-index: 10000;
+        white-space: nowrap;
+      }
+
+      /* Override for guests */
+      .guest-indicator {
+        background-color: #6c757d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav-container">
+      <div class="nav-item" onclick="window.location.href='travel.html'">
+        <h2>Travels</h2>
+        <div class="nav-placeholder"></div>
+      </div>
+
+      <div class="nav-item" onclick="window.location.href='bookclub.html'">
+        <h2>Ayu’s Bookclub</h2>
+        <div class="nav-placeholder"></div>
+      </div>
+
+      <div class="nav-item" onclick="window.location.href='exposures.html'">
+        <h2>Exposures</h2>
+        <div class="nav-placeholder"></div>
+      </div>
+
+      <div class="nav-item" onclick="window.location.href='other.html'">
+        <h2>...</h2>
+        <div class="nav-placeholder"></div>
+      </div>
+    </div>
+
+    <script>
+    document.getElementById("adminLoginBtn")
+      .addEventListener("click", () => {
+        window.location.href = "login.html";
+      });
+  </script>
+  </body>
+</html>

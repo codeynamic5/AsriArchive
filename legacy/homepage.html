@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Asri's Archives - Home</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #c4d0d8;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        text-align: center;
+      }
+
+      .h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 2rem;
+      }
+
+      .enter-button {
+        padding: 0.5rem 2rem;
+        margin-top: 50px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: black;
+        border: 2px solid black;
+        border-radius: 999px;
+        background-color: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .enter-button:hover {
+        background-color: #5b7894;
+        color: white;
+        border-color: #5b7894;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Asri's Archive</h1>
+      <button class="enter-button" onclick="window.location.href='lobby.html'">
+        Enter
+      </button>
+    </div>
+    <script>
+      document.getElementById("enterBtn").addEventListener("click", () => {
+        window.location.href = "lobby.html";
+      });
+    </script>
+  </body>
+</html>
