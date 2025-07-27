@@ -9,7 +9,6 @@
   <body>
     <div class="header">
       <div class="nav-links">
-        <a href="../../homepage.html">Home</a>
         <a href="../../lobby.html">Lobby</a>
         <a href="../../travel.html">Travel</a>
         <a href="../../bookclub.html">Ayu's BookClub</a>
@@ -17,7 +16,9 @@
       </div>
       <div
         class="add-photo-btn"
+        id="addPhotoBtn"
         onclick="window.location.href='../../upload.html'"
+        style="display: none"
       >
         <span>+</span>
       </div>
@@ -34,6 +35,7 @@
       <img class="modal-content" id="modalImage" />
     </div>
 
+    <script src="../../js/auth.js"></script>
     <script src="../../js/cities.js"></script>
   </body>
 </html>

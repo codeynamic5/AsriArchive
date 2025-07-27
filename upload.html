@@ -5,226 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Upload Photo - London</title>
     <link rel="stylesheet" href="css/cities.css" />
-    <style>
-      .upload-container {
-        min-height: 100vh;
-        padding: 100px 20px 40px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: #ffffff;
-      }
-
-      .upload-box {
-        position: fixed;
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        max-width: 500px;
-        width: 100%;
-        text-align: center;
-      }
-
-      .upload-title {
-        font-size: 2.5rem;
-        color: #333;
-        margin-bottom: 10px;
-        font-weight: bold;
-      }
-
-      .upload-subtitle {
-        color: #666;
-        margin-bottom: 30px;
-        font-size: 1.1rem;
-      }
-
-      .upload-area {
-        border: 3px dashed #ddd;
-        border-radius: 15px;
-        padding: 60px 20px;
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .upload-area:hover {
-        border-color: #007bff;
-        background-color: #f8f9ff;
-      }
-
-      .upload-area.dragover {
-        border-color: #007bff;
-        background-color: #e3f2fd;
-        transform: scale(1.02);
-      }
-
-      .upload-icon {
-        font-size: 4rem;
-        color: #ddd;
-        margin-bottom: 20px;
-        transition: color 0.3s ease;
-      }
-
-      .upload-area:hover .upload-icon {
-        color: #007bff;
-      }
-
-      .upload-text {
-        font-size: 1.2rem;
-        color: #666;
-        margin-bottom: 10px;
-      }
-
-      .upload-hint {
-        font-size: 0.9rem;
-        color: #999;
-      }
-
-      .file-input {
-        display: none;
-      }
-
-      .preview-container {
-        margin-top: 20px;
-        display: none;
-      }
-
-      .preview-images-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-      }
-
-      .preview-item {
-        position: relative;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-      }
-
-      .preview-item:hover {
-        transform: scale(1.05);
-      }
-
-      .preview-image {
-        width: 100%;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 10px;
-      }
-
-      .preview-filename {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-        color: white;
-        padding: 10px 8px 8px;
-        font-size: 0.8rem;
-        text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .remove-image {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background: rgba(255, 0, 0, 0.8);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 25px;
-        height: 25px;
-        cursor: pointer;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.3s ease;
-      }
-
-      .remove-image:hover {
-        background: rgba(255, 0, 0, 1);
-      }
-
-      .preview-header {
-        margin-top: 30px;
-        margin-bottom: 15px;
-        color: #333;
-        font-weight: bold;
-        font-size: 1.1rem;
-      }
-
-      .button-group {
-        display: flex;
-        gap: 15px;
-        margin-top: 30px;
-        justify-content: center;
-      }
-
-      .btn {
-        padding: 12px 30px;
-        border: none;
-        border-radius: 25px;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-      }
-
-      .btn-primary {
-        background: #b38787;
-        color: white;
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px #b38787;
-      }
-
-      .btn-secondary {
-        background: #f8f9fa;
-        color: #666;
-        border: 2px solid #ddd;
-      }
-
-      .btn-secondary:hover {
-        background: #e9ecef;
-        border-color: #ccc;
-      }
-
-      .progress-bar {
-        width: 100%;
-        height: 6px;
-        background: #f0f0f0;
-        border-radius: 3px;
-        margin: 20px 0;
-        overflow: hidden;
-        display: none;
-      }
-
-      .progress-fill {
-        height: 100%;
-        background: linear-gradient(45deg, #e4c1c1, #b38787);
-        width: 0%;
-        transition: width 0.3s ease;
-      }
-    </style>
+    <link rel="stylesheet" href="css/upload.css" />
   </head>
   <body>
     <div class="header">
       <div class="nav-links">
-        <a href="homepage.html">Home</a>
         <a href="lobby.html">Lobby</a>
         <a href="travel.html">Travel</a>
         <a href="bookclub.html">Ayu's BookClub</a>
@@ -233,56 +18,100 @@
     </div>
 
     <div class="upload-container">
-      <div class="upload-box">
+      <div class="upload-box" id="uploadBox">
         <h1 class="upload-title">Upload Photo</h1>
         <p class="upload-subtitle">Share your memories from London</p>
 
+        <!-- Admin access message (hidden by default) -->
         <div
-          class="upload-area"
-          id="uploadArea"
-          onclick="document.getElementById('fileInput').click()"
+          id="accessDenied"
+          style="display: none; text-align: center; padding: 40px"
         >
-          <div class="upload-icon">📷</div>
-          <div class="upload-text">
-            Drop your photos here or click to browse
-          </div>
-          <div class="upload-hint">
-            Supports JPG, PNG, GIF up to 300MB per image
-          </div>
-        </div>
-
-        <input
-          type="file"
-          id="fileInput"
-          class="file-input"
-          accept="image/*"
-          multiple
-        />
-
-        <div class="progress-bar" id="progressBar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-
-        <div class="preview-container" id="previewContainer">
-          <div class="preview-header" id="previewHeader">Selected Images:</div>
-          <div class="preview-images-grid" id="previewImagesGrid"></div>
-        </div>
-
-        <div class="button-group">
-          <a href="travels/cities/london.html" class="btn btn-secondary"
-            >Cancel</a
+          <h2 style="color: #dc3545; margin-bottom: 20px">
+            🔒 Admin Access Required
+          </h2>
+          <p style="color: #666; margin-bottom: 30px">
+            Only administrators can upload photos to the archive.<br />
+            Please log in with admin credentials to access this feature.
+          </p>
+          <div
+            style="
+              display: flex;
+              gap: 15px;
+              justify-content: center;
+              flex-wrap: wrap;
+            "
           >
-          <button
-            id="uploadBtn"
-            class="btn btn-primary"
-            onclick="uploadPhotos()"
-          >
-            Upload Photos
-          </button>
+            <a href="login.html" class="btn btn-primary">Login as Admin</a>
+            <a href="travels/cities/london.html" class="btn btn-secondary"
+              >Back to Gallery</a
+            >
+          </div>
         </div>
+
+        <form id="uploadForm">
+          <label class="title-label" for="titleInput">Title</label>
+          <input
+            type="text"
+            id="titleInput"
+            name="title"
+            class="title-input"
+            placeholder="Enter a title for your photo"
+            required
+          />
+
+          <div
+            class="upload-area"
+            id="uploadArea"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">
+              Drop your photos here or click to browse
+            </div>
+            <div class="upload-hint">
+              Select multiple images to create collections like Instagram
+              posts!<br />
+              Supports JPG, PNG, GIF up to 300MB per image
+            </div>
+          </div>
+
+          <input
+            type="file"
+            id="fileInput"
+            class="file-input"
+            accept="image/*"
+            multiple
+          />
+
+          <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="preview-container" id="previewContainer">
+            <div class="preview-header" id="previewHeader">
+              Selected Images:
+            </div>
+            <div class="preview-images-grid" id="previewImagesGrid"></div>
+          </div>
+
+          <div class="button-group">
+            <a href="travels/cities/london.html" class="btn btn-secondary"
+              >Cancel</a
+            >
+            <button
+              id="uploadBtn"
+              class="btn btn-primary"
+              onclick="uploadPhotos()"
+            >
+              Upload Photos
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
+    <script src="js/auth.js"></script>
     <script src="js/upload.js"></script>
   </body>
 </html>
