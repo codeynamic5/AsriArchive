@@ -6,10 +6,37 @@ import Image from "next/image";
 import Header from "../../components/Header";
 
 export default function LobbyPage() {
-  const cities = [
-    { name: "Cambridge", href: "/lobby/cities/cambridge", image: "/images/travel/cam1.png" },
-    { name: "Vienna", href: "/lobby/cities/vienna", image: "/images/travel/cam2.png" },
-    { name: "Manchester", href: "/lobby/cities/manchester", image: "/images/travel/mainman.png" },
+  const sections = [
+    { 
+      name: "Travels", 
+      href: "/travels", 
+      image: "/images/travel/cam1.png",
+      description: "Explore adventures around the world"
+    },
+    { 
+      name: "Exposures", 
+      href: "/exposures", 
+      image: "/images/travel/cam2.png",
+      description: "Photography and visual stories"
+    },
+    { 
+      name: "Book Club", 
+      href: "/bookclub", 
+      image: "/images/travel/cam3.png",
+      description: "Literary discussions and reviews"
+    },
+    { 
+      name: "Cooking", 
+      href: "/cooking", 
+      image: "/images/travel/cam4.png",
+      description: "Recipes and culinary adventures"
+    },
+    { 
+      name: "Cities", 
+      href: "/lobby/cities", 
+      image: "/images/travel/london2.png",
+      description: "Urban explorations and city memories"
+    },
   ];
 
   return (
@@ -22,92 +49,94 @@ export default function LobbyPage() {
             style={{ 
               color: '#333',
               fontFamily: "'Times New Roman', Times, serif",
-              fontSize: '60px',
-              marginBottom: '2rem'
+              fontSize: '80px',
+              marginBottom: '1rem'
             }}
           >
-            Cities
+            Asri&apos;s Archive
           </h1>
+          <p 
+            style={{
+              color: '#666',
+              fontFamily: "'Times New Roman', Times, serif",
+              fontSize: '20px',
+              marginBottom: '3rem'
+            }}
+          >
+            Welcome to my personal collection
+          </p>
         </div>
 
         <div 
-          className="card-container"
           style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '200px',
-            justifyContent: 'center',
-            padding: '20px'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '0 1rem'
           }}
         >
-          {cities.map((city) => (
-            <Link key={city.name} href={city.href}>
+          {sections.map((section) => (
+            <Link key={section.name} href={section.href}>
               <div 
-                className="travel-card"
                 style={{
-                  width: '150px',
-                  height: '150px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
                   borderRadius: '15px',
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  transition: 'transform 0.3s',
-                  position: 'relative'
+                  transition: 'transform 0.3s, box-shadow 0.3s',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                  height: '300px'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
                 }}
               >
-                <Image 
-                  src={city.image}
-                  alt={city.name}
-                  width={150}
-                  height={150}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
-                <div 
-                  className="overlay"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
-                    color: 'white',
-                    padding: '10px',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    fontFamily: "'Times New Roman', Times, serif"
-                  }}
-                >
-                  {city.name}
+                <div style={{ height: '200px', overflow: 'hidden' }}>
+                  <Image
+                    src={section.image}
+                    alt={section.name}
+                    width={400}
+                    height={200}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
+                </div>
+                <div style={{ padding: '1.5rem' }}>
+                  <h3 
+                    style={{
+                      color: '#333',
+                      fontFamily: "'Times New Roman', Times, serif",
+                      fontSize: '24px',
+                      fontWeight: 'bold',
+                      marginBottom: '0.5rem'
+                    }}
+                  >
+                    {section.name}
+                  </h3>
+                  <p 
+                    style={{
+                      color: '#666',
+                      fontFamily: "'Times New Roman', Times, serif",
+                      fontSize: '16px',
+                      lineHeight: '1.4'
+                    }}
+                  >
+                    {section.description}
+                  </p>
                 </div>
               </div>
             </Link>
           ))}
-        </div>
-
-        <div className="text-center mt-8">
-          <button
-            onClick={() => (window.location.href = "/admin")}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: 'rgba(0,0,0,0.7)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontFamily: "'Times New Roman', Times, serif"
-            }}
-          >
-            Admin Login
-          </button>
         </div>
       </main>
     </div>

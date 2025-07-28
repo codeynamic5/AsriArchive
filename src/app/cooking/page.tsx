@@ -2,10 +2,10 @@
 
 import Header from "../../components/Header";
 
-export default function UploadPage() {
+export default function CookingPage() {
   return (
     <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-      <Header currentPage="upload" />
+      <Header currentPage="cooking" />
       
       <main style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
         <h1 
@@ -17,11 +17,11 @@ export default function UploadPage() {
             marginBottom: '2rem'
           }}
         >
-          Upload
+          Cooking
         </h1>
         
         <div style={{ textAlign: 'center' }}>
-          <p>Upload functionality coming soon...</p>
+          <p>Cooking recipes and adventures coming soon...</p>
         </div>
       </main>
     </div>

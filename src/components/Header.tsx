@@ -13,7 +13,7 @@ export default function Header({ currentPage }: HeaderProps) {
     { name: "Travels", href: "/travels" },
     { name: "Exposures", href: "/exposures" },
     { name: "Book Club", href: "/bookclub" },
-    { name: "Upload", href: "/upload" },
+    { name: "Cooking", href: "/cooking" },
   ];
 
   return (
