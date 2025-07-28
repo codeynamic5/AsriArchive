@@ -1,43 +1,39 @@
 "use client";
 
+import Header from "../../../components/Header";
 import Link from "next/link";
 import Image from "next/image";
-import Header from "../../../components/Header";
 
-export default function CitiesPage() {
+export default function UKPage() {
   const cities = [
-    { name: "Cambridge", href: "/lobby/cities/cambridge", image: "/images/travel/cam1.png" },
-    { name: "Vienna", href: "/lobby/cities/vienna", image: "/images/travel/cam2.png" },
-    { name: "Manchester", href: "/lobby/cities/manchester", image: "/images/travel/mainman.png" },
-    { name: "London", href: "/lobby/cities/london", image: "/images/travel/london2.png" },
+    { name: "London", href: "/travels/uk/london", image: "/images/travel/london2.png" },
+    { name: "Cambridge", href: "/travels/uk/cambridge", image: "/images/travel/cam1.png" },
+    { name: "Manchester", href: "/travels/uk/manchester", image: "/images/travel/mainman.png" },
+    { name: "Scotland", href: "/travels/uk/scotland", image: "/images/travel/don3.png" },
   ];
 
   return (
-    <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-      <Header currentPage="lobby" />
+    <div className="travel-page">
+      <Header currentPage="travels" />
       
-      <main style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
-        <div className="text-center mb-8">
-          <h1 
-            style={{ 
-              color: '#333',
-              fontFamily: "'Times New Roman', Times, serif",
-              fontSize: '60px',
-              marginBottom: '2rem'
-            }}
-          >
-            Cities
-          </h1>
-        </div>
-
+      <div style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
+        <h1 style={{ 
+          color: '#333',
+          fontFamily: "'Times New Roman', Times, serif",
+          fontSize: '60px',
+          textAlign: 'center',
+          marginBottom: '2rem'
+        }}>
+          United Kingdom
+        </h1>
+        
         <div 
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: '2rem',
             maxWidth: '1000px',
-            margin: '0 auto',
-            padding: '0 1rem'
+            margin: '0 auto'
           }}
         >
           {cities.map((city) => (
@@ -50,7 +46,7 @@ export default function CitiesPage() {
                   cursor: 'pointer',
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-                  height: '250px'
+                  height: '280px'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.02)';
@@ -61,12 +57,12 @@ export default function CitiesPage() {
                   e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
                 }}
               >
-                <div style={{ height: '180px', overflow: 'hidden' }}>
-                  <Image
-                    src={city.image}
+                <div style={{ height: '200px', overflow: 'hidden' }}>
+                  <Image 
+                    src={city.image} 
                     alt={city.name}
                     width={300}
-                    height={180}
+                    height={200}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -74,7 +70,7 @@ export default function CitiesPage() {
                     }}
                   />
                 </div>
-                <div style={{ padding: '1rem', textAlign: 'center' }}>
+                <div style={{ padding: '1.5rem', textAlign: 'center' }}>
                   <h3 
                     style={{
                       color: '#333',
@@ -90,7 +86,7 @@ export default function CitiesPage() {
             </Link>
           ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

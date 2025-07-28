@@ -1,21 +1,89 @@
 "use client";
 
 import Header from "../../../components/Header";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function AustriaPage() {
+  const cities = [
+    { name: "Vienna", href: "/travels/austria/vienna", image: "/images/travel/cam2.png" },
+    { name: "Salzburg", href: "/travels/austria/salzburg", image: "/images/travel/cam5.png" },
+  ];
+
   return (
     <div className="travel-page">
       <Header currentPage="travels" />
       
-      <div style={{ paddingTop: '120px', textAlign: 'center' }}>
+      <div style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
         <h1 style={{ 
           color: '#333',
           fontFamily: "'Times New Roman', Times, serif",
-          fontSize: '60px'
+          fontSize: '60px',
+          textAlign: 'center',
+          marginBottom: '2rem'
         }}>
           Austria
         </h1>
-        <p>Austria travel collection coming soon...</p>
+        
+        <div 
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '2rem',
+            maxWidth: '800px',
+            margin: '0 auto'
+          }}
+        >
+          {cities.map((city) => (
+            <Link key={city.name} href={city.href}>
+              <div 
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  borderRadius: '15px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s, box-shadow 0.3s',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                  height: '280px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                }}
+              >
+                <div style={{ height: '200px', overflow: 'hidden' }}>
+                  <Image 
+                    src={city.image} 
+                    alt={city.name}
+                    width={300}
+                    height={200}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
+                </div>
+                <div style={{ padding: '1.5rem', textAlign: 'center' }}>
+                  <h3 
+                    style={{
+                      color: '#333',
+                      fontFamily: "'Times New Roman', Times, serif",
+                      fontSize: '20px',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {city.name}
+                  </h3>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

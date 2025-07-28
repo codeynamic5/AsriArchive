@@ -31,12 +31,6 @@ export default function LobbyPage() {
       image: "/images/travel/cam4.png",
       description: "Recipes and culinary adventures"
     },
-    { 
-      name: "Cities", 
-      href: "/lobby/cities", 
-      image: "/images/travel/london2.png",
-      description: "Urban explorations and city memories"
-    },
   ];
 
   return (

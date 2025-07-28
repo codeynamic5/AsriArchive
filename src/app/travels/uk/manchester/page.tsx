@@ -2,10 +2,10 @@
 
 import Header from "../../../../components/Header";
 
-export default function CambridgePage() {
+export default function ManchesterPage() {
   return (
     <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-      <Header currentPage="lobby" />
+      <Header currentPage="travels" />
       
       <main style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
         <h1 
@@ -17,11 +17,11 @@ export default function CambridgePage() {
             marginBottom: '2rem'
           }}
         >
-          Cambridge
+          Manchester
         </h1>
         
         <div style={{ textAlign: 'center' }}>
-          <p>Cambridge collection coming soon...</p>
+          <p>Manchester collection coming soon...</p>
         </div>
       </main>
     </div>
