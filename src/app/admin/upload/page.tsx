@@ -12,6 +12,7 @@ function UploadContent() {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [imageCaptions, setImageCaptions] = useState<string[]>([]);
   
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -49,17 +50,34 @@ function UploadContent() {
     
     if (files) {
       const previews: string[] = [];
-      Array.from(files).forEach(file => {
+      const captions: string[] = [];
+      
+      Array.from(files).forEach((file) => {
         const reader = new FileReader();
         reader.onload = (e) => {
           if (e.target?.result) {
             previews.push(e.target.result as string);
-            setPreviewImages([...previews]);
+            captions.push(`Photo in ${city}`); // Default caption
+            
+            // Update state when all files are processed
+            if (previews.length === files.length) {
+              setPreviewImages([...previews]);
+              setImageCaptions([...captions]);
+            }
           }
         };
         reader.readAsDataURL(file);
       });
+    } else {
+      setPreviewImages([]);
+      setImageCaptions([]);
     }
+  };
+
+  const handleCaptionChange = (index: number, caption: string) => {
+    const newCaptions = [...imageCaptions];
+    newCaptions[index] = caption;
+    setImageCaptions(newCaptions);
   };
 
   const handleUpload = async () => {
@@ -71,18 +89,42 @@ function UploadContent() {
     setUploading(true);
     setUploadStatus("Uploading...");
 
-    // Simulate upload process (replace with actual Firebase/API upload)
     try {
-      // In a real implementation, you would upload to Firebase Storage or your preferred service
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate upload delay
+      const formData = new FormData();
       
-      setUploadStatus(`Successfully uploaded ${selectedFiles.length} images to ${city}, ${country}`);
-      setSelectedFiles(null);
-      setPreviewImages([]);
+      // Add files to FormData
+      Array.from(selectedFiles).forEach(file => {
+        formData.append('files', file);
+      });
       
-      // Reset file input
-      const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
+      // Add captions for each file
+      imageCaptions.forEach((caption, index) => {
+        formData.append(`caption_${index}`, caption);
+      });
+      
+      // Add metadata
+      formData.append('city', city || 'unknown');
+      formData.append('country', country || 'unknown');
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setUploadStatus(`Successfully uploaded ${selectedFiles.length} images to ${city}, ${country}`);
+        setSelectedFiles(null);
+        setPreviewImages([]);
+        setImageCaptions([]);
+        
+        // Reset file input
+        const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+      } else {
+        setUploadStatus(`Upload failed: ${result.error}`);
+      }
       
     } catch (err) {
       console.error('Upload error:', err);
@@ -177,7 +219,7 @@ function UploadContent() {
                   fontFamily: "'Times New Roman', Times, serif",
                   marginBottom: '1rem'
                 }}>
-                  Preview ({previewImages.length} images):
+                  Preview & Add Titles ({previewImages.length} images):
                 </h3>
                 
                 <div style={{
@@ -191,7 +233,10 @@ function UploadContent() {
                     <div key={index} style={{
                       position: 'relative',
                       borderRadius: '5px',
-                      overflow: 'hidden'
+                      overflow: 'hidden',
+                      backgroundColor: 'white',
+                      padding: '10px',
+                      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                     }}>
                       <Image
                         src={src}
@@ -201,7 +246,23 @@ function UploadContent() {
                         style={{
                           width: '100%',
                           height: '150px',
-                          objectFit: 'cover'
+                          objectFit: 'cover',
+                          borderRadius: '5px',
+                          marginBottom: '10px'
+                        }}
+                      />
+                      <input
+                        type="text"
+                        value={imageCaptions[index] || ''}
+                        onChange={(e) => handleCaptionChange(index, e.target.value)}
+                        placeholder="Enter photo title..."
+                        style={{
+                          width: '100%',
+                          padding: '8px',
+                          border: '1px solid #ddd',
+                          borderRadius: '3px',
+                          fontSize: '12px',
+                          fontFamily: "'Times New Roman', Times, serif"
                         }}
                       />
                     </div>
