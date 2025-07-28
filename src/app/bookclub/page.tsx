@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Header from "../../components/Header";
 
 export default function BookClubPage() {
@@ -7,7 +8,7 @@ export default function BookClubPage() {
   const currentBook = {
     title: "The Seven Husbands of Evelyn Hugo",
     author: "Taylor Jenkins Reid",
-    cover: "/images/books/evelyn-hugo.jpg",
+    cover: "/images/travel/cam1.png", // Using a travel image as placeholder
     description: "A reclusive Hollywood icon finally tells her story to a young journalist, revealing the truth about her glamorous and scandalous life.",
     status: "Currently Reading"
   };
@@ -20,13 +21,13 @@ export default function BookClubPage() {
       
       <div className="bookclub-content">
         <div className="book-display">
-          <img 
+          <Image 
             src={currentBook.cover} 
             alt={currentBook.title}
+            width={200}
+            height={300}
             className="book-cover"
-            onError={(e) => {
-              e.currentTarget.src = "/images/books/placeholder.jpg";
-            }}
+            style={{ borderRadius: '5px', marginBottom: '1rem' }}
           />
           <div className="book-info">
             <h2>{currentBook.title}</h2>

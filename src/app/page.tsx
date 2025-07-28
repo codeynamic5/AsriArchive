@@ -15,7 +15,7 @@ export default function HomePage() {
             fontSize: '100px'
           }}
         >
-          Asri's Archive
+          Asri&apos;s Archive
         </h1>
         <Link href="/lobby">
           <button 

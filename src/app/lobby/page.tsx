@@ -2,13 +2,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import Header from "../../components/Header";
 
 export default function LobbyPage() {
   const cities = [
-    { name: "London", href: "/lobby/cities/london", image: "/images/travel/london2.png" },
     { name: "Cambridge", href: "/lobby/cities/cambridge", image: "/images/travel/cam1.png" },
-    { name: "Vienna", href: "/lobby/cities/vienna", image: "/images/travel/austria.jpg" },
+    { name: "Vienna", href: "/lobby/cities/vienna", image: "/images/travel/cam2.png" },
     { name: "Manchester", href: "/lobby/cities/manchester", image: "/images/travel/mainman.png" },
   ];
 
@@ -60,16 +60,15 @@ export default function LobbyPage() {
                   e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
-                <img 
+                <Image 
                   src={city.image}
                   alt={city.name}
+                  width={150}
+                  height={150}
                   style={{
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/travel/placeholder.jpg";
                   }}
                 />
                 <div 

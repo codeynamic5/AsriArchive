@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Header from "../../components/Header";
 
 export default function ExposuresPage() {
@@ -29,9 +30,11 @@ export default function ExposuresPage() {
 
   // Auto-advance slides (optional)
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000);
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % exposureImages.length);
+    }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [exposureImages.length]);
 
   return (
     <div className="exposures-page">
@@ -46,11 +49,17 @@ export default function ExposuresPage() {
         >
           {exposureImages.map((image, index) => (
             <div key={index} className="slide">
-              <img 
+              <Image 
                 src={image} 
                 alt={`Exposure ${index + 1}`}
-                onError={(e) => {
-                  e.currentTarget.src = "/images/travel/placeholder.jpg";
+                width={800}
+                height={600}
+                style={{
+                  maxWidth: '90%',
+                  maxHeight: '70vh',
+                  objectFit: 'contain',
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
                 }}
               />
             </div>
