@@ -1,15 +1,24 @@
 @import "tailwindcss";
 
+/* Import your original styles */
+@import "../styles/header.css";
+@import "../styles/travels.css";
+@import "../styles/exposures.css";
+@import "../styles/bookclub.css";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  /* Add your original color scheme */
+  --primary-bg: #f0f0f0;
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --text-primary: #333;
+  --text-secondary: #666;
+  
+  /* Font variables */
+  --font-geist-sans: "Geist", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +32,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Global link styles from your original design */
+a {
+  text-decoration: none;
+  color: inherit;
 }
