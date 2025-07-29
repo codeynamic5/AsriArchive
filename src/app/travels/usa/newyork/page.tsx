@@ -3,16 +3,6 @@
 import { useState, useEffect } from "react";
 import Header from "../../../../components/Header";
 
-// Sample gallery data
-const sampleImages = [
-  { src: "/images/travel/cam1.png", alt: "Central Park morning", caption: "Central Park morning" },
-  { src: "/images/travel/cam2.png", alt: "Brooklyn Bridge", caption: "Brooklyn Bridge" },
-  { src: "/images/travel/cam3.png", alt: "Times Square", caption: "Times Square" },
-  { src: "/images/travel/cam4.png", alt: "Manhattan skyline", caption: "Manhattan skyline" },
-  { src: "/images/travel/cam5.png", alt: "High Line", caption: "High Line" },
-  { src: "/images/travel/cam6.png", alt: "Staten Island Ferry", caption: "Staten Island Ferry" },
-];
-
 interface ImageData {
   src: string;
   alt: string;
@@ -39,9 +29,8 @@ interface UploadedItem {
 
 export default function NewYorkPage() {
   const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [allImages, setAllImages] = useState<ImageData[]>(sampleImages);
+  const [allImages, setAllImages] = useState<ImageData[]>([]);
 
   // Load uploaded images
   useEffect(() => {
@@ -71,7 +60,7 @@ export default function NewYorkPage() {
               };
             }
           });
-          setAllImages([...sampleImages, ...uploadedImages]);
+          setAllImages([...uploadedImages]);
         }
       } catch (err) {
         console.log('No uploaded images found, using sample images only', err);
@@ -87,29 +76,46 @@ export default function NewYorkPage() {
     setIsAdmin(adminStatus);
   }, []);
 
-  const openModal = (image: ImageData) => {
+  const openModal = (image: ImageData, index: number) => {
+    // If it's a collection, redirect to collection page instead of opening modal
+    if (image.isCollection) {
+      window.location.href = `/travels/usa/newyork/collection/${index}`;
+      return;
+    }
+    
     setSelectedImage(image);
-    setCurrentSlideIndex(0); // Reset to first slide when opening modal
   };
 
   const closeModal = () => {
     setSelectedImage(null);
-    setCurrentSlideIndex(0);
   };
 
-  const nextSlide = () => {
-    if (selectedImage?.images) {
-      setCurrentSlideIndex((prev) => 
-        prev >= selectedImage.images!.length - 1 ? 0 : prev + 1
-      );
-    }
-  };
+  const handleDeleteImage = async (imageIndex: number) => {
+    if (!isAdmin) return;
+    
+    const confirmed = window.confirm('Are you sure you want to delete this image/collection?');
+    if (!confirmed) return;
 
-  const prevSlide = () => {
-    if (selectedImage?.images) {
-      setCurrentSlideIndex((prev) => 
-        prev <= 0 ? selectedImage.images!.length - 1 : prev - 1
-      );
+    try {
+      // Call the delete API
+      const response = await fetch(`/api/delete?city=newyork&country=usa&itemIndex=${imageIndex}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        // Remove from the allImages state immediately
+        const updatedImages = allImages.filter((_, index) => index !== imageIndex);
+        setAllImages(updatedImages);
+        
+        console.log('Image deleted successfully from server and metadata');
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete image');
+      }
+      
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      alert('Failed to delete image. Please try again.');
     }
   };
 
@@ -161,7 +167,7 @@ export default function NewYorkPage() {
           {allImages.map((image, index) => (
             <div 
               key={index}
-              onClick={() => openModal(image)}
+              onClick={() => openModal(image, index)}
               style={{
                 breakInside: 'avoid',
                 marginBottom: '1rem',
@@ -176,10 +182,16 @@ export default function NewYorkPage() {
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.02)';
                 e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+                // Show delete button on hover if admin
+                const deleteBtn = e.currentTarget.querySelector('.admin-delete-btn') as HTMLElement;
+                if (deleteBtn) deleteBtn.style.opacity = '1';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
                 e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                // Hide delete button when not hovering
+                const deleteBtn = e.currentTarget.querySelector('.admin-delete-btn') as HTMLElement;
+                if (deleteBtn) deleteBtn.style.opacity = '0';
               }}
             >
               <img
@@ -208,6 +220,44 @@ export default function NewYorkPage() {
                   📁 {image.imageCount} photos
                 </div>
               )}
+
+              {/* Admin delete button - only show for uploaded images (not sample images) */}
+              {isAdmin && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent opening modal
+                    handleDeleteImage(index);
+                  }}
+                  className="admin-delete-btn"
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    left: '10px',
+                    backgroundColor: 'rgba(255, 0, 0, 0.8)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '30px',
+                    height: '30px',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    opacity: '0',
+                    transition: 'opacity 0.3s, background-color 0.3s',
+                    zIndex: 10
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 0, 0, 1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
+                  }}
+                >
+                  ×
+                </button>
+              )}
               
               <div style={{ padding: '15px' }}>
                 <p style={{ 
@@ -224,8 +274,8 @@ export default function NewYorkPage() {
         </div>
       </main>
 
-      {/* Modal for full-size image view */}
-      {selectedImage && (
+      {/* Modal for full-size image view - Only for single images */}
+      {selectedImage && !selectedImage.isCollection && (
         <div 
           style={{
             position: 'fixed',
@@ -250,179 +300,29 @@ export default function NewYorkPage() {
             cursor: 'default'
           }} onClick={(e) => e.stopPropagation()}>
             
-            {selectedImage.isCollection ? (
-              // Collection view - Free-form Horizontal Slider
-              <div style={{
-                width: '95vw',
-                height: '90vh',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative'
-              }}>
-                {/* Main slide container */}
-                <div style={{
-                  position: 'relative',
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  {/* Current slide */}
-                  {selectedImage.images && selectedImage.images[currentSlideIndex] && (
-                    <img
-                      src={selectedImage.images[currentSlideIndex].path}
-                      alt={selectedImage.images[currentSlideIndex].caption}
-                      style={{
-                        maxWidth: '90%',
-                        maxHeight: '85%',
-                        objectFit: 'contain',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
-                      }}
-                    />
-                  )}
-
-                  {/* Navigation arrows */}
-                  {selectedImage.images && selectedImage.images.length > 1 && (
-                    <>
-                      <button
-                        onClick={prevSlide}
-                        style={{
-                          position: 'absolute',
-                          left: '30px',
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          backgroundColor: 'rgba(0,0,0,0.6)',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '50%',
-                          width: '60px',
-                          height: '60px',
-                          cursor: 'pointer',
-                          fontSize: '28px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          transition: 'all 0.3s',
-                          zIndex: 10,
-                          boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.8)';
-                          e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.6)';
-                          e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-                        }}
-                      >
-                        ←
-                      </button>
-                      
-                      <button
-                        onClick={nextSlide}
-                        style={{
-                          position: 'absolute',
-                          right: '30px',
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          backgroundColor: 'rgba(0,0,0,0.6)',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '50%',
-                          width: '60px',
-                          height: '60px',
-                          cursor: 'pointer',
-                          fontSize: '28px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          transition: 'all 0.3s',
-                          zIndex: 10,
-                          boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.8)';
-                          e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.6)';
-                          e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-                        }}
-                      >
-                        →
-                      </button>
-                    </>
-                  )}
-
-                  {/* Slide counter */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '30px',
-                    right: '30px',
-                    backgroundColor: 'rgba(0,0,0,0.7)',
-                    color: 'white',
-                    padding: '10px 15px',
-                    borderRadius: '25px',
-                    fontSize: '16px',
-                    fontFamily: "'Times New Roman', Times, serif",
-                    fontWeight: 'bold',
-                    zIndex: 10,
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
-                  }}>
-                    {currentSlideIndex + 1} / {selectedImage.images?.length || 0}
-                  </div>
-
-                  {/* Current image caption */}
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '20px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    backgroundColor: 'rgba(0,0,0,0.7)',
-                    color: 'white',
-                    padding: '10px 20px',
-                    borderRadius: '20px',
-                    fontSize: '16px',
-                    fontFamily: "'Times New Roman', Times, serif",
-                    textAlign: 'center',
-                    maxWidth: '80%',
-                    zIndex: 10,
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
-                  }}>
-                    {selectedImage.images && selectedImage.images[currentSlideIndex]?.caption}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              // Single image view
-              <>
-                <img
-                  src={selectedImage.src}
-                  alt={selectedImage.alt}
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain'
-                  }}
-                />
-                <div style={{
-                  position: 'absolute',
-                  bottom: '1rem',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  backgroundColor: 'rgba(0,0,0,0.7)',
-                  color: 'white',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '5px',
-                  fontFamily: "'Times New Roman', Times, serif"
-                }}>
-                  {selectedImage.caption}
-                </div>
-              </>
-            )}
+            {/* Single image view */}
+            <img
+              src={selectedImage.src}
+              alt={selectedImage.alt}
+              style={{
+                maxWidth: '100%',
+                maxHeight: '100%',
+                objectFit: 'contain'
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: '1rem',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: 'rgba(0,0,0,0.7)',
+              color: 'white',
+              padding: '0.5rem 1rem',
+              borderRadius: '5px',
+              fontFamily: "'Times New Roman', Times, serif"
+            }}>
+              {selectedImage.caption}
+            </div>
           </div>
         </div>
       )}
