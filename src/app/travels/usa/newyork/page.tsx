@@ -39,6 +39,7 @@ interface UploadedItem {
 
 export default function NewYorkPage() {
   const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [allImages, setAllImages] = useState<ImageData[]>(sampleImages);
 
@@ -88,10 +89,28 @@ export default function NewYorkPage() {
 
   const openModal = (image: ImageData) => {
     setSelectedImage(image);
+    setCurrentSlideIndex(0); // Reset to first slide when opening modal
   };
 
   const closeModal = () => {
     setSelectedImage(null);
+    setCurrentSlideIndex(0);
+  };
+
+  const nextSlide = () => {
+    if (selectedImage?.images) {
+      setCurrentSlideIndex((prev) => 
+        prev >= selectedImage.images!.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const prevSlide = () => {
+    if (selectedImage?.images) {
+      setCurrentSlideIndex((prev) => 
+        prev <= 0 ? selectedImage.images!.length - 1 : prev - 1
+      );
+    }
   };
 
   return (
@@ -232,51 +251,149 @@ export default function NewYorkPage() {
           }} onClick={(e) => e.stopPropagation()}>
             
             {selectedImage.isCollection ? (
-              // Collection view
+              // Collection view - Free-form Horizontal Slider
               <div style={{
-                backgroundColor: 'white',
-                borderRadius: '10px',
-                padding: '20px',
-                maxHeight: '80vh',
-                overflow: 'auto'
+                width: '95vw',
+                height: '90vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative'
               }}>
-                <h2 style={{
-                  margin: '0 0 20px 0',
-                  fontFamily: "'Times New Roman', Times, serif",
-                  textAlign: 'center'
-                }}>
-                  {selectedImage.caption}
-                </h2>
+                {/* Main slide container */}
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                  gap: '15px'
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}>
-                  {selectedImage.images?.map((img: CollectionImage, index: number) => (
-                    <div key={index} style={{
-                      borderRadius: '5px',
-                      overflow: 'hidden'
-                    }}>
-                      <img
-                        src={img.path}
-                        alt={img.caption}
+                  {/* Current slide */}
+                  {selectedImage.images && selectedImage.images[currentSlideIndex] && (
+                    <img
+                      src={selectedImage.images[currentSlideIndex].path}
+                      alt={selectedImage.images[currentSlideIndex].caption}
+                      style={{
+                        maxWidth: '90%',
+                        maxHeight: '85%',
+                        objectFit: 'contain',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
+                      }}
+                    />
+                  )}
+
+                  {/* Navigation arrows */}
+                  {selectedImage.images && selectedImage.images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevSlide}
                         style={{
-                          width: '100%',
-                          height: '200px',
-                          objectFit: 'cover'
+                          position: 'absolute',
+                          left: '30px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          backgroundColor: 'rgba(0,0,0,0.6)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '60px',
+                          height: '60px',
+                          cursor: 'pointer',
+                          fontSize: '28px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.3s',
+                          zIndex: 10,
+                          boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
                         }}
-                      />
-                      <p style={{
-                        margin: '10px 0 0 0',
-                        fontSize: '12px',
-                        color: '#666',
-                        fontFamily: "'Times New Roman', Times, serif",
-                        textAlign: 'center'
-                      }}>
-                        {img.caption}
-                      </p>
-                    </div>
-                  ))}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                          e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.6)';
+                          e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                        }}
+                      >
+                        ←
+                      </button>
+                      
+                      <button
+                        onClick={nextSlide}
+                        style={{
+                          position: 'absolute',
+                          right: '30px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          backgroundColor: 'rgba(0,0,0,0.6)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '60px',
+                          height: '60px',
+                          cursor: 'pointer',
+                          fontSize: '28px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.3s',
+                          zIndex: 10,
+                          boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                          e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.6)';
+                          e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                        }}
+                      >
+                        →
+                      </button>
+                    </>
+                  )}
+
+                  {/* Slide counter */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '30px',
+                    right: '30px',
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    color: 'white',
+                    padding: '10px 15px',
+                    borderRadius: '25px',
+                    fontSize: '16px',
+                    fontFamily: "'Times New Roman', Times, serif",
+                    fontWeight: 'bold',
+                    zIndex: 10,
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                  }}>
+                    {currentSlideIndex + 1} / {selectedImage.images?.length || 0}
+                  </div>
+
+                  {/* Current image caption */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '20px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    color: 'white',
+                    padding: '10px 20px',
+                    borderRadius: '20px',
+                    fontSize: '16px',
+                    fontFamily: "'Times New Roman', Times, serif",
+                    textAlign: 'center',
+                    maxWidth: '80%',
+                    zIndex: 10,
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                  }}>
+                    {selectedImage.images && selectedImage.images[currentSlideIndex]?.caption}
+                  </div>
                 </div>
               </div>
             ) : (

@@ -14,5 +14,36 @@
     "caption": "matcha blue",
     "size": 333523,
     "uploadDate": "2025-07-28T08:20:47.727Z"
+  },
+  {
+    "type": "collection",
+    "collectionId": "collection_1753760158309",
+    "title": "newyork Collection 7/29/2025",
+    "images": [
+      {
+        "fileName": "1753760158290-0-Screenshot 2025-07-29 at 10.33.40.png",
+        "originalName": "Screenshot 2025-07-29 at 10.33.40.png",
+        "path": "/uploads/usa/newyork/1753760158290-0-Screenshot 2025-07-29 at 10.33.40.png",
+        "caption": "Photo in newyork",
+        "size": 2335884
+      },
+      {
+        "fileName": "1753760158296-1-Screenshot 2025-07-29 at 10.33.47.png",
+        "originalName": "Screenshot 2025-07-29 at 10.33.47.png",
+        "path": "/uploads/usa/newyork/1753760158296-1-Screenshot 2025-07-29 at 10.33.47.png",
+        "caption": "Photo in newyork",
+        "size": 2755153
+      },
+      {
+        "fileName": "1753760158302-2-Screenshot 2025-07-29 at 10.33.53.png",
+        "originalName": "Screenshot 2025-07-29 at 10.33.53.png",
+        "path": "/uploads/usa/newyork/1753760158302-2-Screenshot 2025-07-29 at 10.33.53.png",
+        "caption": "Photo in newyork",
+        "size": 3738596
+      }
+    ],
+    "uploadDate": "2025-07-29T03:35:58.309Z",
+    "imageCount": 3,
+    "coverImage": "/uploads/usa/newyork/1753760158290-0-Screenshot 2025-07-29 at 10.33.40.png"
   }
 ]
