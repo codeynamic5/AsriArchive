@@ -13,6 +13,8 @@ function UploadContent() {
   const [uploadStatus, setUploadStatus] = useState("");
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [imageCaptions, setImageCaptions] = useState<string[]>([]);
+  const [isCollection, setIsCollection] = useState(false);
+  const [collectionTitle, setCollectionTitle] = useState("");
   
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -63,6 +65,15 @@ function UploadContent() {
             if (previews.length === files.length) {
               setPreviewImages([...previews]);
               setImageCaptions([...captions]);
+              
+              // Set default collection behavior
+              if (files.length > 1) {
+                setIsCollection(true);
+                setCollectionTitle(`${city} Collection ${new Date().toLocaleDateString()}`);
+              } else {
+                setIsCollection(false);
+                setCollectionTitle("");
+              }
             }
           }
         };
@@ -71,6 +82,8 @@ function UploadContent() {
     } else {
       setPreviewImages([]);
       setImageCaptions([]);
+      setIsCollection(false);
+      setCollectionTitle("");
     }
   };
 
@@ -102,6 +115,12 @@ function UploadContent() {
         formData.append(`caption_${index}`, caption);
       });
       
+      // Add collection data
+      formData.append('isCollection', isCollection.toString());
+      if (isCollection && collectionTitle) {
+        formData.append('collectionTitle', collectionTitle);
+      }
+      
       // Add metadata
       formData.append('city', city || 'unknown');
       formData.append('country', country || 'unknown');
@@ -118,6 +137,8 @@ function UploadContent() {
         setSelectedFiles(null);
         setPreviewImages([]);
         setImageCaptions([]);
+        setIsCollection(false);
+        setCollectionTitle("");
         
         // Reset file input
         const fileInput = document.getElementById('fileInput') as HTMLInputElement;
@@ -136,7 +157,7 @@ function UploadContent() {
 
   if (loading) {
     return (
-      <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p>Loading...</p>
       </div>
     );
@@ -147,7 +168,7 @@ function UploadContent() {
   }
 
   return (
-    <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }}>
       <Header />
       
       <main style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
@@ -212,6 +233,64 @@ function UploadContent() {
               />
             </div>
 
+            {previewImages.length > 1 && (
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h3 style={{ 
+                  color: '#333',
+                  fontFamily: "'Times New Roman', Times, serif",
+                  marginBottom: '1rem'
+                }}>
+                  Collection Settings
+                </h3>
+                
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: '#333',
+                    fontFamily: "'Times New Roman', Times, serif",
+                    marginBottom: '0.5rem'
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={isCollection}
+                      onChange={(e) => setIsCollection(e.target.checked)}
+                      style={{ marginRight: '0.5rem' }}
+                    />
+                    Create as a collection (multiple images in one card)
+                  </label>
+                </div>
+
+                {isCollection && (
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ 
+                      display: 'block',
+                      marginBottom: '0.5rem',
+                      color: '#333',
+                      fontFamily: "'Times New Roman', Times, serif"
+                    }}>
+                      Collection Title:
+                    </label>
+                    <input
+                      type="text"
+                      value={collectionTitle}
+                      onChange={(e) => setCollectionTitle(e.target.value)}
+                      placeholder="Enter collection title..."
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '2px solid #333',
+                        borderRadius: '5px',
+                        fontSize: '16px',
+                        fontFamily: "'Times New Roman', Times, serif",
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
             {previewImages.length > 0 && (
               <div style={{ marginBottom: '1.5rem' }}>
                 <h3 style={{ 
@@ -274,16 +353,12 @@ function UploadContent() {
             <button
               onClick={handleUpload}
               disabled={!selectedFiles || uploading}
+              className="asri-button"
               style={{
                 width: '100%',
-                backgroundColor: uploading ? '#999' : '#333',
-                color: 'white',
-                border: 'none',
-                padding: '1rem',
-                borderRadius: '5px',
+                backgroundColor: uploading ? '#999' : 'var(--asri-accent)',
                 cursor: uploading ? 'not-allowed' : 'pointer',
-                fontFamily: "'Times New Roman', Times, serif",
-                fontSize: '16px'
+                opacity: uploading ? 0.6 : 1
               }}
             >
               {uploading ? 'Uploading...' : `Upload ${selectedFiles?.length || 0} Images`}
@@ -304,14 +379,9 @@ function UploadContent() {
           <div style={{ textAlign: 'center' }}>
             <button
               onClick={() => router.push('/admin/dashboard')}
+              className="asri-button"
               style={{
                 backgroundColor: '#666',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif",
                 marginRight: '1rem'
               }}
             >
@@ -320,15 +390,7 @@ function UploadContent() {
             
             <button
               onClick={() => router.push(`/travels/${country}/${city}`)}
-              style={{
-                backgroundColor: '#333',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif"
-              }}
+              className="asri-button"
             >
               View Gallery
             </button>

@@ -17,12 +17,30 @@ interface ImageData {
   src: string;
   alt: string;
   caption: string;
+  isCollection?: boolean;
+  images?: CollectionImage[];
+  imageCount?: number;
+}
+
+interface CollectionImage {
+  path: string;
+  caption: string;
+}
+
+interface UploadedItem {
+  type: string;
+  title?: string;
+  coverImage?: string;
+  images?: CollectionImage[];
+  imageCount?: number;
+  path?: string;
+  caption?: string;
 }
 
 export default function NewYorkPage() {
   const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [allImages, setAllImages] = useState(sampleImages);
+  const [allImages, setAllImages] = useState<ImageData[]>(sampleImages);
 
   // Load uploaded images
   useEffect(() => {
@@ -31,11 +49,27 @@ export default function NewYorkPage() {
         const response = await fetch('/uploads/usa/newyork/metadata.json');
         if (response.ok) {
           const uploadedMetadata = await response.json();
-          const uploadedImages = uploadedMetadata.map((item: { path: string; caption: string; }) => ({
-            src: item.path,
-            alt: item.caption,
-            caption: item.caption
-          }));
+          const uploadedImages = uploadedMetadata.map((item: UploadedItem) => {
+            if (item.type === 'collection') {
+              // Handle collection
+              return {
+                src: item.coverImage,
+                alt: item.title,
+                caption: item.title,
+                isCollection: true,
+                images: item.images,
+                imageCount: item.imageCount
+              };
+            } else {
+              // Handle single image
+              return {
+                src: item.path,
+                alt: item.caption,
+                caption: item.caption,
+                isCollection: false
+              };
+            }
+          });
           setAllImages([...sampleImages, ...uploadedImages]);
         }
       } catch (err) {
@@ -117,7 +151,16 @@ export default function NewYorkPage() {
                 overflow: 'hidden',
                 cursor: 'pointer',
                 transition: 'transform 0.3s, box-shadow 0.3s',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                position: 'relative'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
               }}
             >
               <img
@@ -129,6 +172,24 @@ export default function NewYorkPage() {
                   display: 'block'
                 }}
               />
+              
+              {/* Collection indicator */}
+              {image.isCollection && (
+                <div style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  backgroundColor: 'rgba(0,0,0,0.7)',
+                  color: 'white',
+                  padding: '5px 10px',
+                  borderRadius: '15px',
+                  fontSize: '12px',
+                  fontFamily: "'Times New Roman', Times, serif"
+                }}>
+                  📁 {image.imageCount} photos
+                </div>
+              )}
+              
               <div style={{ padding: '15px' }}>
                 <p style={{ 
                   margin: 0, 
@@ -158,33 +219,93 @@ export default function NewYorkPage() {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 1000,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            padding: '20px'
           }}
           onClick={closeModal}
         >
-          <div style={{ maxWidth: '90vw', maxHeight: '90vh', position: 'relative' }}>
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.alt}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '100%',
-                objectFit: 'contain'
-              }}
-            />
-            <div style={{
-              position: 'absolute',
-              bottom: '1rem',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: 'rgba(0,0,0,0.7)',
-              color: 'white',
-              padding: '0.5rem 1rem',
-              borderRadius: '5px',
-              fontFamily: "'Times New Roman', Times, serif"
-            }}>
-              {selectedImage.caption}
-            </div>
+          <div style={{ 
+            maxWidth: '90vw', 
+            maxHeight: '90vh', 
+            position: 'relative',
+            cursor: 'default'
+          }} onClick={(e) => e.stopPropagation()}>
+            
+            {selectedImage.isCollection ? (
+              // Collection view
+              <div style={{
+                backgroundColor: 'white',
+                borderRadius: '10px',
+                padding: '20px',
+                maxHeight: '80vh',
+                overflow: 'auto'
+              }}>
+                <h2 style={{
+                  margin: '0 0 20px 0',
+                  fontFamily: "'Times New Roman', Times, serif",
+                  textAlign: 'center'
+                }}>
+                  {selectedImage.caption}
+                </h2>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '15px'
+                }}>
+                  {selectedImage.images?.map((img: CollectionImage, index: number) => (
+                    <div key={index} style={{
+                      borderRadius: '5px',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={img.path}
+                        alt={img.caption}
+                        style={{
+                          width: '100%',
+                          height: '200px',
+                          objectFit: 'cover'
+                        }}
+                      />
+                      <p style={{
+                        margin: '10px 0 0 0',
+                        fontSize: '12px',
+                        color: '#666',
+                        fontFamily: "'Times New Roman', Times, serif",
+                        textAlign: 'center'
+                      }}>
+                        {img.caption}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              // Single image view
+              <>
+                <img
+                  src={selectedImage.src}
+                  alt={selectedImage.alt}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'contain'
+                  }}
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '1rem',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  backgroundColor: 'rgba(0,0,0,0.7)',
+                  color: 'white',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '5px',
+                  fontFamily: "'Times New Roman', Times, serif"
+                }}>
+                  {selectedImage.caption}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

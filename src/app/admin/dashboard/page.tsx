@@ -43,7 +43,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p>Loading...</p>
       </div>
     );
@@ -61,7 +61,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }}>
       <Header />
       
       <main style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
@@ -80,15 +80,8 @@ export default function AdminDashboard() {
             
             <button
               onClick={handleLogout}
-              style={{
-                backgroundColor: '#666',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif"
-              }}
+              className="asri-button"
+              style={{ backgroundColor: '#666' }}
             >
               Logout
             </button>
@@ -152,16 +145,10 @@ export default function AdminDashboard() {
                 Manage existing photos and galleries
               </p>
               
-              <button style={{
-                backgroundColor: '#333',
-                color: 'white',
-                border: 'none',
-                padding: '1rem 2rem',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif",
-                width: '100%'
-              }}>
+              <button 
+                className="asri-button"
+                style={{ width: '100%' }}
+              >
                 Manage Galleries
               </button>
             </div>
@@ -186,16 +173,10 @@ export default function AdminDashboard() {
                 Configure archive settings
               </p>
               
-              <button style={{
-                backgroundColor: '#333',
-                color: 'white',
-                border: 'none',
-                padding: '1rem 2rem',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif",
-                width: '100%'
-              }}>
+              <button 
+                className="asri-button"
+                style={{ width: '100%' }}
+              >
                 Archive Settings
               </button>
             </div>

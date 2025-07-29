@@ -9,6 +9,8 @@ export async function POST(request: NextRequest) {
     const files = formData.getAll('files') as File[];
     const city = formData.get('city') as string;
     const country = formData.get('country') as string;
+    const collectionTitle = formData.get('collectionTitle') as string;
+    const isCollection = formData.get('isCollection') === 'true';
     
     if (!files || files.length === 0) {
       return NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
@@ -63,10 +65,27 @@ export async function POST(request: NextRequest) {
     }
 
     // Add new files to metadata
-    const newMetadata = uploadedFiles.map(file => ({
-      ...file,
-      uploadDate: new Date().toISOString()
-    }));
+    let newMetadata;
+    
+    if (isCollection && files.length > 1) {
+      // Create a collection entry
+      newMetadata = [{
+        type: 'collection',
+        collectionId: `collection_${Date.now()}`,
+        title: collectionTitle || `Collection in ${city}`,
+        images: uploadedFiles,
+        uploadDate: new Date().toISOString(),
+        imageCount: uploadedFiles.length,
+        coverImage: uploadedFiles[0].path // Use first image as cover
+      }];
+    } else {
+      // Create individual entries
+      newMetadata = uploadedFiles.map(file => ({
+        type: 'single',
+        ...file,
+        uploadDate: new Date().toISOString()
+      }));
+    }
 
     const updatedMetadata = [...existingMetadata, ...newMetadata];
     await writeFile(metadataPath, JSON.stringify(updatedMetadata, null, 2));

@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
 
   if (isLoggedIn) {
     return (
-      <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+      <div style={{ minHeight: '100vh' }}>
         <Header />
         
         <main style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
@@ -58,33 +58,16 @@ export default function AdminLoginPage() {
               
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                style={{
-                  backgroundColor: '#333',
-                  color: 'white',
-                  border: 'none',
-                  padding: '1rem 2rem',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  fontFamily: "'Times New Roman', Times, serif",
-                  fontSize: '16px',
-                  marginRight: '1rem'
-                }}
+                className="asri-button"
+                style={{ marginRight: '1rem' }}
               >
                 Go to Dashboard
               </button>
               
               <button
                 onClick={handleLogout}
-                style={{
-                  backgroundColor: '#666',
-                  color: 'white',
-                  border: 'none',
-                  padding: '1rem 2rem',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  fontFamily: "'Times New Roman', Times, serif",
-                  fontSize: '16px'
-                }}
+                className="asri-button"
+                style={{ backgroundColor: '#666' }}
               >
                 Logout
               </button>
@@ -96,7 +79,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }}>
       <Header />
       
       <main style={{ paddingTop: '120px', padding: '120px 2rem 2rem' }}>
@@ -153,17 +136,8 @@ export default function AdminLoginPage() {
             
             <button
               type="submit"
-              style={{
-                width: '100%',
-                backgroundColor: '#333',
-                color: 'white',
-                border: 'none',
-                padding: '1rem',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontFamily: "'Times New Roman', Times, serif",
-                fontSize: '16px'
-              }}
+              className="asri-button"
+              style={{ width: '100%' }}
             >
               Login
             </button>

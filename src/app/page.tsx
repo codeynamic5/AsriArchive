@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main className="flex h-screen items-center justify-center" style={{ backgroundColor: '#f0f0f0' }}>
+    <main className="flex h-screen items-center justify-center">
       <div className="text-center">
         <h1 
           className="text-6xl font-bold mb-8"
@@ -19,20 +19,17 @@ export default function HomePage() {
         </h1>
         <Link href="/lobby">
           <button 
-            className="px-8 py-3 border-2 rounded-full transition duration-300"
+            className={`asri-button px-10 py-3 rounded-full border-2 border-black
+              bg-transparent
+              text-black
+              font-serif font-bold text-lg
+              
+              transition-colors duration-300 ease-out
+              hover:bg-[#5b7894]
+              hover:text-white
+              `}
             style={{
-              borderColor: '#333',
-              color: '#333',
               fontFamily: "'Times New Roman', Times, serif",
-              fontWeight: 'bold'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#333';
-              e.currentTarget.style.color = 'white';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#333';
             }}
           >
             Enter

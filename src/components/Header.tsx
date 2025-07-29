@@ -8,12 +8,11 @@ interface HeaderProps {
 
 export default function Header({ currentPage }: HeaderProps) {
   const navItems = [
-    { name: "Home", href: "/" },
     { name: "Lobby", href: "/lobby" },
     { name: "Travels", href: "/travels" },
     { name: "Exposures", href: "/exposures" },
-    { name: "Book Club", href: "/bookclub" },
     { name: "Cooking", href: "/cooking" },
+        { name: "Book Club", href: "/bookclub" },
   ];
 
   return (

@@ -6,10 +6,10 @@ import Header from "../../components/Header";
 export default function BookClubPage() {
   // Sample book data - you would populate this from your data source
   const currentBook = {
-    title: "The Seven Husbands of Evelyn Hugo",
-    author: "Taylor Jenkins Reid",
+    title: "The Alchemist",
+    author: "Paulo Coelho",
     cover: "/images/travel/cam1.png", // Using a travel image as placeholder
-    description: "A reclusive Hollywood icon finally tells her story to a young journalist, revealing the truth about her glamorous and scandalous life.",
+    description: "Description of the book goes here.",
     status: "Currently Reading"
   };
 
