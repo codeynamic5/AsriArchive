@@ -27,26 +27,24 @@ export default function Navbar() {
       </a>
 
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-[#F6F7F9]/95 backdrop-blur-md border-b border-black/[0.06]"
+        className="fixed top-0 left-0 right-0 z-50"
         role="banner"
       >
-        <div className="flex items-center justify-between px-8 h-14">
+        <div className="flex items-center justify-between h-14" style={{ padding: "0 24px" }}>
 
           {/* Logotype — "Ay.," */}
           <Link
             href="/"
             aria-label="Asri's Archive — home"
             className="
-              font-display italic font-black text-ink
-              text-[21px] tracking-[-0.02em] leading-none
+              font-black text-ink leading-none tracking-tight
               hover:opacity-70 transition-opacity duration-200
               focus-visible:outline-none focus-visible:ring-2
               focus-visible:ring-ink/50 focus-visible:rounded-sm
             "
+            style={{ fontFamily: "var(--font-logotype)", fontSize: "28px" }}
           >
-            {/* "Ay" heavy, ".," slightly lighter for typographic rhythm */}
-            Ay
-            <span className="font-normal opacity-80">.,</span>
+            Ay.,
           </Link>
 
           {/* Desktop nav links */}
@@ -117,9 +115,9 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="md:hidden overflow-hidden border-t border-black/[0.06]"
+              className="md:hidden overflow-hidden"
             >
-              <nav aria-label="Mobile navigation" className="flex flex-col px-8 py-4 gap-1">
+              <nav aria-label="Mobile navigation" className="flex flex-col py-4 gap-1" style={{ padding: "16px 24px" }}>
                 {links.map((l) => {
                   const active = pathname.startsWith(l.href);
                   return (

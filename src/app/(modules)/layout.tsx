@@ -4,10 +4,7 @@ export default function ModulesLayout({ children }: { children: React.ReactNode 
   return (
     <>
       <Navbar />
-      {/* pt-14 clears the fixed 56px navbar */}
-      <main id="main-content" className="pt-14">
-        {children}
-      </main>
+      <main id="main-content">{children}</main>
     </>
   );
 }

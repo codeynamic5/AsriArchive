@@ -37,7 +37,7 @@ const containerVariants = {
 
 const cellVariants = {
   hidden: { opacity: 0 },
-  show:   { opacity: 1, transition: { duration: 0.55, ease: "easeOut" } },
+  show:   { opacity: 1, transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] as const } },
 };
 
 export default function MenuPage() {

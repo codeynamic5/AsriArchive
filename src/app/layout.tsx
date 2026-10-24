@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Source_Serif_4, JetBrains_Mono } from "next/font/google";
+import { Playfair_Display, Source_Serif_4, JetBrains_Mono, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -24,6 +24,13 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+const instrumentSans = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-logotype",
+  weight: ["700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Asri's Archive",
   description: "A personal archive of travels, photography, books, and cooking.",
@@ -32,7 +39,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${playfair.variable} ${sourceSerif.variable} ${jetbrains.variable}`}>
+      <body className={`${playfair.variable} ${sourceSerif.variable} ${jetbrains.variable} ${instrumentSans.variable}`}>
         {children}
       </body>
     </html>

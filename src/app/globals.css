@@ -2,9 +2,10 @@
 
 @theme {
   /* Fonts — injected by next/font via CSS variables */
-  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
-  --font-body:    var(--font-serif), Georgia, serif;
-  --font-mono:    var(--font-jetbrains), monospace;
+  --font-display:   var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-body:      var(--font-serif), Georgia, serif;
+  --font-mono:      var(--font-jetbrains), monospace;
+  --font-logotype:  var(--font-logotype), "Helvetica Neue", Arial, sans-serif;
 
   /* Design tokens — from spec.md §6 */
   --color-lobby:        #C5D1D8;   /* all lobby/menu/gallery/book-club pages */
