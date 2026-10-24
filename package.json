@@ -12,7 +12,7 @@
     "embla-carousel-react": "^7.0.0",
     "embla-carousel-autoplay": "^7.0.0",
     "next-sanity": "^6.0.0",
-    "@supabase/supabase-js": "^3.0.0",
+    "@supabase/supabase-js": "^2.0.0",
     "framer-motion": "^13.1.0",
     "next": "15.4.4",
     "react": "19.1.0",
@@ -30,5 +30,10 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "@tailwindcss/oxide@4.1.11": true,
+    "sharp@0.34.3": true,
+    "unrs-resolver@1.11.1": true
   }
 }

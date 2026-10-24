@@ -19,7 +19,7 @@ const sourceSerif = Source_Serif_4({
 
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-jetbrains",
   weight: ["400", "500"],
   display: "swap",
 });

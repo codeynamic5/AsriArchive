@@ -1,45 +1,96 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-export default function HomePage() {
+const SESSION_KEY = "asri-archive-visited";
+
+export default function FrontDoorPage() {
+  const router = useRouter();
+  const [leaving, setLeaving] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Skip front-door for returning visitors in the same session
+  useEffect(() => {
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      router.replace("/menu");
+    }
+  }, [router]);
+
+  function handleEnter() {
+    if (leaving) return;
+    sessionStorage.setItem(SESSION_KEY, "1");
+    setLeaving(true);
+    // Navigate after exit animation completes (500ms)
+    setTimeout(() => router.push("/menu"), 500);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleEnter();
+    }
+  }
+
   return (
-    <div className="relative h-screen flex items-center justify-center overflow-hidden bg-home">
-      {/* subtle noise grain */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "200px 200px" }}
-      />
-
-      <motion.div
-        className="text-center z-10"
-        initial={{ opacity: 0, y: 28 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+    // Skip-to-content for keyboard users
+    <>
+      <a
+        href="#enter-btn"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-ink focus:text-white focus:rounded focus:font-mono focus:text-xs"
       >
-        <motion.h1
-          className="font-display text-6xl md:text-8xl font-black text-ink tracking-tight leading-none mb-8 md:mb-16"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-        >
-          Asri&apos;s Archive
-        </motion.h1>
+        Skip to enter
+      </a>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <Link
-            href="/lobby"
-            className="inline-block px-10 py-3 font-mono text-xs tracking-[0.2em] uppercase border-2 border-ink rounded-full text-ink hover:bg-accent-dark hover:border-accent-dark hover:text-white transition-all duration-300"
+      <motion.main
+        className="h-screen w-full flex items-center justify-center bg-lobby overflow-hidden"
+        aria-label="Asri's Archive front door"
+        animate={leaving ? { opacity: 0 } : { opacity: 1 }}
+        transition={{ duration: 0.45, ease: "easeInOut" }}
+      >
+        <div className="text-center select-none">
+          {/* Wordmark */}
+          <motion.h1
+            className="font-display font-black text-ink leading-none tracking-tight"
+            style={{ fontSize: "clamp(44px, 8vw, 96px)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            Enter
-          </Link>
-        </motion.div>
-      </motion.div>
-    </div>
+            Asri&apos;s Archive
+          </motion.h1>
+
+          {/* Enter button */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.55 }}
+            className="mt-20"
+          >
+            <button
+              id="enter-btn"
+              ref={buttonRef}
+              onClick={handleEnter}
+              onKeyDown={handleKeyDown}
+              aria-label="Enter Asri's Archive"
+              className="
+                min-w-[160px] px-14 py-5
+                font-body text-base text-ink
+                border border-ink/35 rounded-full
+                hover:bg-ink/5 hover:border-ink/55
+                transition-all duration-300
+                focus-visible:outline-none
+                focus-visible:ring-2 focus-visible:ring-ink/60
+                focus-visible:ring-offset-4 focus-visible:ring-offset-lobby
+                cursor-pointer
+              "
+            >
+              Enter
+            </button>
+          </motion.div>
+        </div>
+      </motion.main>
+    </>
   );
 }
