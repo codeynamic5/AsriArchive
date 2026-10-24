@@ -2,65 +2,148 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
-  { label: "Lobby",           href: "/lobby" },
-  { label: "Travels",         href: "/travels" },
-  { label: "Ayu's Book Club", href: "/bookclub" },
-  { label: "Exposures",       href: "/exposures" },
+  { label: "Travels",   href: "/travels"   },
+  { label: "Gallery",   href: "/gallery"   },
+  { label: "Cooking",   href: "/cooking"   },
+  { label: "Book Club", href: "/book-club" },
 ];
 
-export default function Navbar({ extra }: { extra?: React.ReactNode }) {
+export default function Navbar() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <>
-      {/* Skip to content — visible only on focus for keyboard users */}
+      {/* Skip-to-content for keyboard users */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-accent focus:text-white focus:rounded focus:font-mono focus:text-xs focus:tracking-widest focus:uppercase"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-white focus:rounded focus:font-mono focus:text-xs"
       >
-        Skip to main content
+        Skip to content
       </a>
 
       <header
+        className="fixed top-0 left-0 right-0 z-50 bg-[#F6F7F9]/95 backdrop-blur-md border-b border-black/[0.06]"
         role="banner"
-        className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-[0_1px_6px_rgba(0,0,0,0.08)]"
       >
-        <div className="flex items-center justify-between px-6 md:px-10 py-0">
-          {/* Nav — centred on desktop, scrollable on mobile */}
-          <nav
-            aria-label="Main navigation"
-            className="flex items-center gap-8 overflow-x-auto scrollbar-none mx-auto"
+        <div className="flex items-center justify-between px-8 h-14">
+
+          {/* Logotype — "Ay.," */}
+          <Link
+            href="/"
+            aria-label="Asri's Archive — home"
+            className="
+              font-display italic font-black text-ink
+              text-[21px] tracking-[-0.02em] leading-none
+              hover:opacity-70 transition-opacity duration-200
+              focus-visible:outline-none focus-visible:ring-2
+              focus-visible:ring-ink/50 focus-visible:rounded-sm
+            "
           >
+            {/* "Ay" heavy, ".," slightly lighter for typographic rhythm */}
+            Ay
+            <span className="font-normal opacity-80">.,</span>
+          </Link>
+
+          {/* Desktop nav links */}
+          <nav aria-label="Main navigation" className="hidden md:flex items-center gap-8">
             {links.map((l) => {
-              const active = pathname === l.href;
+              const active = pathname.startsWith(l.href);
               return (
                 <Link
                   key={l.href}
                   href={l.href}
                   aria-current={active ? "page" : undefined}
                   className={`
-                    relative font-sans text-[11px] font-semibold uppercase tracking-widest
-                    px-3 py-3 min-h-[44px] flex items-center
-                    whitespace-nowrap transition-colors duration-200
-                    rounded-sm
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
-                    ${active ? "text-accent" : "text-ink hover:text-accent/70"}
+                    relative font-body text-[13px] tracking-wide
+                    min-h-[44px] flex items-center
+                    transition-colors duration-200
+                    focus-visible:outline-none focus-visible:ring-2
+                    focus-visible:ring-ink/40 focus-visible:rounded-sm
+                    ${active ? "text-ink" : "text-muted hover:text-ink"}
                   `}
                 >
                   {l.label}
-                  {/* Active underline indicator */}
                   {active && (
-                    <span className="absolute bottom-0 left-4 right-4 h-[2px] bg-accent rounded-full" />
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute bottom-2 left-0 right-0 h-px bg-ink"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
                   )}
                 </Link>
               );
             })}
           </nav>
 
-          {extra && <div className="flex-shrink-0 ml-4">{extra}</div>}
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            className="
+              md:hidden flex flex-col justify-center items-center
+              w-11 h-11 gap-[5px] cursor-pointer
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:rounded
+            "
+          >
+            <motion.span
+              className="block w-5 h-px bg-ink origin-center"
+              animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+            />
+            <motion.span
+              className="block w-5 h-px bg-ink"
+              animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
+              transition={{ duration: 0.15 }}
+            />
+            <motion.span
+              className="block w-5 h-px bg-ink origin-center"
+              animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+            />
+          </button>
         </div>
+
+        {/* Mobile dropdown */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="md:hidden overflow-hidden border-t border-black/[0.06]"
+            >
+              <nav aria-label="Mobile navigation" className="flex flex-col px-8 py-4 gap-1">
+                {links.map((l) => {
+                  const active = pathname.startsWith(l.href);
+                  return (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={() => setMenuOpen(false)}
+                      aria-current={active ? "page" : undefined}
+                      className={`
+                        font-body text-[15px] tracking-wide
+                        min-h-[44px] flex items-center
+                        border-b border-black/[0.05] last:border-0
+                        transition-colors duration-200
+                        ${active ? "text-ink font-semibold" : "text-muted hover:text-ink"}
+                      `}
+                    >
+                      {l.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );
