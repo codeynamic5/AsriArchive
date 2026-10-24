@@ -1,16 +1,58 @@
 @import "tailwindcss";
 
-* {
+@theme {
+  /* Fonts — injected by next/font via CSS variables */
+  --font-display: var(--font-playfair), "Times New Roman", serif;
+  --font-body:    var(--font-serif), Georgia, serif;
+  --font-mono:    var(--font-mono), monospace;
+
+  /* Brand palette */
+  --color-home:        #c4d0d8;
+  --color-lobby:       #dbe9f3;
+  --color-module:      #f0f0f0;
+  --color-card:        #d3c3c3;
+  --color-card-border: #b98989;
+  --color-accent:      #5b7894;
+  --color-accent-dark: #4a6578;
+  --color-ink:         #333333;
+  --color-muted:       #666666;
+  --color-white-blur:  rgba(255, 255, 255, 0.8);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  color: var(--color-ink);
 }
 
 a {
   text-decoration: none;
   color: inherit;
+}
+
+/* Hide scrollbars while keeping scroll behaviour */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
