@@ -2,21 +2,18 @@
 
 @theme {
   /* Fonts — injected by next/font via CSS variables */
-  --font-display: var(--font-playfair), "Times New Roman", serif;
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
   --font-body:    var(--font-serif), Georgia, serif;
-  --font-mono:    var(--font-mono), monospace;
+  --font-mono:    var(--font-jetbrains), monospace;
 
-  /* Brand palette */
-  --color-home:        #c4d0d8;
-  --color-lobby:       #dbe9f3;
-  --color-module:      #f0f0f0;
-  --color-card:        #d3c3c3;
-  --color-card-border: #b98989;
-  --color-accent:      #5b7894;
-  --color-accent-dark: #4a6578;
-  --color-ink:         #333333;
-  --color-muted:       #666666;
-  --color-white-blur:  rgba(255, 255, 255, 0.8);
+  /* Design tokens — from spec.md §6 */
+  --color-lobby:        #C5D1D8;   /* all lobby/menu/gallery/book-club pages */
+  --color-surface:      #F1F1F1;   /* light content pages (travels, cooking) */
+  --color-nav:          #F6F7F9;   /* top nav background */
+  --color-ink:          #333333;   /* headings and body text */
+  --color-muted:        #666666;   /* captions and metadata */
+  --color-card:         #D0C4C2;   /* menu card surface (dusty-rose) */
+  --color-card-border:  #B58B8B;   /* menu card border */
 }
 
 *,
@@ -29,6 +26,7 @@
 
 html {
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -51,8 +49,11 @@ a {
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
